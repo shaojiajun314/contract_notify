@@ -1,0 +1,60 @@
+package clist
+
+import (
+	"math/big"
+)
+
+type CList struct {
+	strict bool
+	values *SortedMap
+
+	costcap *big.Int
+}
+
+func NewCList(strict bool) *CList {
+	return &CList{
+		strict:  strict,
+		values:  NewSortedMap(),
+		costcap: new(big.Int),
+	}
+}
+
+func (l *CList) Add(value interface{}, index uint64) {
+	l.values.Put(index, value)
+}
+
+func (l *CList) Forward(threshold uint64) []interface{} {
+	return l.values.Forward(threshold)
+}
+
+func (l *CList) Cap(threshold int) []interface{} {
+	return l.values.Cap(threshold)
+}
+
+func (l *CList) Remove(index uint64) (bool, []interface{}) {
+	if removed := l.values.Remove(index); !removed {
+		return false, nil
+	}
+
+	return true, nil
+}
+
+func (l *CList) Ready(start uint64) []interface{} {
+	return l.values.Ready(start)
+}
+
+func (l *CList) Len() int {
+	return l.values.Len()
+}
+
+func (l *CList) Empty() bool {
+	return l.Len() == 0
+}
+
+func (l *CList) Flatten() []interface{} {
+	return l.values.Flatten()
+}
+
+func (l *CList) LastElement() interface{} {
+	return l.values.LastElement()
+}
